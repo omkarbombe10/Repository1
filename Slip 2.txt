@@ -1,0 +1,71 @@
+Q) Create angular JS Application that show the current Date and Time of the System
+(Use Interval Service)
+
+<!DOCTYPE html>
+<html ng-app="dateTimeApp">
+<head>
+<title>Current Date and Time</title>
+<script src="angular.min.js"></script>
+</head>
+<body ng-controller="DateTimeController">
+<h2>Current Date and Time:</h2>
+<p>{{ currentTime }}</p>
+<script>
+var app = angular.module('dateTimeApp', []);
+app.controller('DateTimeController', function($scope, $interval) {
+var updateTime = function() {
+$scope.currentTime = new Date().toLocaleString();
+};
+updateTime();
+$interval(updateTime, 1000);
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+Q2 Create a node.js file that Select all records from the "Teacher" table, and find the Teachers whose salary is greater than 20,000.
+Ans-
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017';
+const dbName = 'teacherDB';
+const collectionName = 'Teacher';
+async function findTeachers() {
+const client = new MongoClient(uri);
+try {
+await client.connect();
+console.log(' Connected to MongoDB');
+const db = client.db(dbName);
+const teacherCollection = db.collection(collectionName);
+const allTeachers = await teacherCollection.find({}).toArray();
+console.log('\n All Teachers:');
+console.table(allTeachers);
+const highSalaryTeachers = await teacherCollection.find({ salary: { $gt: 20000 } }).toArray();
+console.log('\n Teachers with salary > ₹20,000:');
+console.table(highSalaryTeachers);
+} catch (err) {
+console.error('Error:', err);
+} finally {
+await client.close();
+console.log('\nDisconnected from MongoDB');
+}
+}
+findTeachers();
+
+save with js
+Mongo DB
+use teacherDB;
+db.Teacher.insertMany([
+{ name: "Anjali Sharma", subject: "Mathematics", salary: 18000 },
+{ name: "Rajesh Verma", subject: "Physics", salary: 25000 },
+{ name: "Priya Nair", subject: "English", salary: 22000 },
+{ name: "Amitabh Singh", subject: "History", salary: 19500 },
+{ name: "Kavita Iyer", subject: "Chemistry", salary: 30000 }
+]);
+db.Teacher.find();
+db.Teacher.find({ salary: { $gt: 20000 } });
+
+

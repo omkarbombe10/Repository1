@@ -1,0 +1,161 @@
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const port = 3000;
+
+// Built-in middleware to parse URL-encoded data (form data)
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files (HTML form)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Custom validation function
+function validateEmployeeData(data) {
+  const errors = [];
+
+  // Validate Name
+  if (!data.name || data.name.length < 3 || data.name.length > 30) {
+    errors.push('Name must be between 3 and 30 characters.');
+  }
+
+  // Validate Email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!data.email || !emailRegex.test(data.email)) {
+    errors.push('Please enter a valid email address.');
+  }
+
+  // Validate Phone Number (must be 10 digits)
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!data.phone || !phoneRegex.test(data.phone)) {
+    errors.push('Phone number must be exactly 10 digits.');
+  }
+
+  // Validate Date of Birth (must be a valid date)
+  if (!data.dob || isNaN(new Date(data.dob))) {
+    errors.push('Please enter a valid date of birth.');
+  }
+
+  // Validate Position
+  if (!data.position || data.position.length < 3) {
+    errors.push('Position must be at least 3 characters long.');
+  }
+
+  return errors;
+}
+
+// POST route to handle form submission
+app.post('/register', (req, res) => {
+  const errors = validateEmployeeData(req.body);
+
+  if (errors.length > 0) {
+    return res.status(400).send(errors.join('<br>'));
+  }
+
+  // If validation passes, respond with the employee data
+  res.send(`Employee registered successfully with data: ${JSON.stringify(req.body)}`);
+});
+
+// Serve HTML form directly when accessing the root URL
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Employee Registration</title>
+    </head>
+    <body>
+      <h1>Employee Registration Form</h1>
+      <form id="registrationForm" action="/register" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required><br><br>
+        
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br><br>
+        
+        <label for="position">Position:</label>
+        <input type="text" id="position" name="position" required><br><br>
+        
+        <button type="submit">Register</button>
+      </form>
+    </body>
+    </html>
+  `);
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
+
+
+
+
+
+
+
+
+Q2) Write an AngularJS program that takes two numbers from the user and apply a service (mathOperation) for performing basic arithmetic operations (addition and multiplication). Use a separate module with a service to perform these operations and display the results on the web page.
+<!DOCTYPE html>
+<html lang="en" ng-app="mathApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AngularJS Arithmetic Operations</title>
+<script src="https://code.angularjs.org/1.8.2/angular.min.js"></script>
+<script>
+var app = angular.module('mathApp', []);
+app.service('mathOperation', function() {
+this.add = function(a, b) {
+return a + b;
+};
+this.multiply = function(a, b) {
+return a * b;
+};
+});
+app.controller('MathController', function($scope, mathOperation) {
+$scope.num1 = 0;
+$scope.num2 = 0;
+$scope.sum = 0;
+$scope.product = 0;
+$scope.performAddition = function() {
+$scope.sum = mathOperation.add($scope.num1, $scope.num2);
+};
+$scope.performMultiplication = function() {
+$scope.product = mathOperation.multiply($scope.num1, $scope.num2);
+};
+});
+</script>
+</head>
+<body>
+<div ng-controller="MathController">
+<h2>Arithmetic Operations</h2>
+<label for="num1">Enter first number: </label>
+<input type="number" id="num1" ng-model="num1">
+<br>
+<label for="num2">Enter second number: </label>
+<input type="number" id="num2" ng-model="num2">
+<br><br>
+<button ng-click="performAddition()">Add</button>
+<button ng-click="performMultiplication()">Multiply</button>
+<br><br>
+<div>
+<h3>Results:</h3>
+<p>Sum: {{ sum }}</p>
+<p>Product: {{ product }}</p>
+</div>
+</div>
+</body>
+</html>
+Save as html
+
+

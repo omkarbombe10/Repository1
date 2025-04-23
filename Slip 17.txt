@@ -1,0 +1,97 @@
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://127.0.0.1:27017'; 
+
+const dbName = 'shop';
+const collectionName = 'Customers';
+
+async function Records() {
+
+  const client = new MongoClient(uri);
+
+  try {
+   
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+  
+    const Customers = [
+      { name: 'Devesh', Item:'Soap'},
+      { name: 'Devendra',Item:'Dal' }
+    ];
+
+    const result = await collection.insertMany(Customers);
+
+    
+    console.log('Inserted documents:', result.insertedCount);
+    console.log('Inserted IDs:', result.insertedIds);
+  } catch (error) {
+    console.error('Error inserting records:', error);
+  } finally {
+    await client.close();
+  }
+}
+Records();
+
+
+
+
+
+
+
+
+
+
+Q2)  Write an AngularJS program that demonstrates the concepts of one-way data binding, two-way data binding, and event handling using multiple controllers.
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AngularJS Data Binding Example</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body>
+
+<div ng-controller="OneWayController">
+<h2>One-way Data Binding</h2>
+<p>Message from Controller 1: {{message}}</p>
+</div>
+
+<div ng-controller="TwoWayController">
+<h2>Two-way Data Binding</h2>
+<input type="text" ng-model="userInput" />
+<p>You typed: {{userInput}}</p>
+</div>
+
+<div ng-controller="EventHandlingController">
+<h2>Event Handling</h2>
+<button ng-click="changeMessage()">Click me to change the message</button>
+<p>{{message}}</p>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+
+app.controller('OneWayController', function($scope) {
+$scope.message = "Hello from One-Way Data Binding!";
+});
+
+app.controller('TwoWayController', function($scope) {
+$scope.userInput = "Initial Text";
+});
+
+app.controller('EventHandlingController', function($scope) {
+$scope.message = "Click the button to change this message!";
+
+$scope.changeMessage = function() {
+$scope.message = "The message has been changed!";
+};
+});
+</script>
+
+</body>
+</html>
+Save as html
+
+

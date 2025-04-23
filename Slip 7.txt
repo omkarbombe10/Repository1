@@ -1,0 +1,108 @@
+Q) Using angular js display the 10 student details in Table format (using ng-repeat
+directive use Array to store data)
+Ans-
+<!DOCTYPE html>
+<html ng-app="studentApp">
+<head>
+<title>Student Details</title>
+<script src="angular.min.js"></script>
+</head>
+<body ng-controller="StudentController">
+<h2>Student Details</h2>
+<table border="1" cellpadding="10">
+<tr>
+<th>Roll No</th>
+<th>Name</th>
+<th>Class</th>
+<th>Marks</th>
+</tr>
+<tr ng-repeat="student in students">
+<td>{{student.rollNo}}</td>
+<td>{{student.name}}</td>
+<td>{{student.class}}</td>
+<td>{{student.marks}}</td>
+</tr>
+</table>
+<script>
+
+var app = angular.module("studentApp", []);
+app.controller("StudentController", function($scope) {
+$scope.students = [
+{ rollNo: 1, name: "John", class: "10A", marks: 85 },
+{ rollNo: 2, name: "Priya", class: "10A", marks: 92 },
+{ rollNo: 3, name: "Amit", class: "10B", marks: 78 },
+{ rollNo: 4, name: "Sara", class: "10C", marks: 88 },
+{ rollNo: 5, name: "Ravi", class: "10B", marks: 90 },
+{ rollNo: 6, name: "Sneha", class: "10A", marks: 95 },
+{ rollNo: 7, name: "Karan", class: "10C", marks: 80 },
+{ rollNo: 8, name: "Meena", class: "10B", marks: 87 },
+{ rollNo: 9, name: "Arjun", class: "10A", marks: 89 },
+{ rollNo: 10, name: "Nisha", class: "10C", marks: 91 }
+];
+});
+</script>
+</body>
+</html>
+
+
+
+Q2)----------
+
+Create sample.txt inside a folder called files
+files/sample.txt
+Hello, student! This is your downloadable file.
+
+
+app.js
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const PORT = 3000;
+app.get('/download', (req, res) => {
+const filePath = path.join(__dirname, 'files', 'sample.txt');
+res.download(filePath, 'student-file.txt', (err) => {
+if (err) {
+console.error('Error sending file:', err);
+res.status(500).send('Something went wrong.');
+}
+});
+});
+app.get('/', (req, res) => {
+res.send('<h1>File Download Example</h1><a href="/download">Download File</a>');
+});
+
+app.listen(PORT, () => {
+console.log(`Server running at http://localhost:${PORT}`);
+});
+npm init -y
+npm install express
+
+
+
+
+
+
+
+------------------OR ----------------------
+
+const express = require('express');
+const path = require('path');
+
+const app = express();
+
+app.get('/download', (req, res) => {
+    const filePath = path.join(__dirname, 'a1.txt'); 
+    console.log(filePath);
+
+    res.download(filePath, 'downloaded_file.txt', (err) => {
+        if (err) {
+            console.error('Error sending file:', err);
+            res.status(500).send('Error downloading the file.');
+        }
+    });
+});
+
+app.listen(2000);
+
+// localhost:2000/download

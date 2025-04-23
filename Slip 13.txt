@@ -1,0 +1,174 @@
+.Create a nodejs program to demonstrate the event driven application and diaply the
+even and odd from 1 to 200 numbers.
+Ansconst EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+eventEmitter.on('even', (num) => {
+console.log(`${num} is even`);
+});
+eventEmitter.on('odd', (num) => {
+console.log(`${num} is odd`);
+});
+for (let i = 1; i <= 200; i++) {
+if (i % 2 === 0) {
+eventEmitter.emit('even', i);
+} else {
+eventEmitter.emit('odd', i);
+}
+}
+Save as .js
+
+
+
+
+
+
+
+
+
+
+
+
+Q2)Create a web application to fetch the Bank(Bank no, Bank Name ,Address , IFSC code ) details using mongodb connection and display the result in html table using expressjs and mongodb.
+
+bank-app/
+│
+├── app.js
+├── public/
+│   └── index.html
+│   └── script.js
+├── package.json
+
+
+package.json
+{
+"name": "bank-app",
+"version": "1.0.0",
+"description": "Bank details app using plain HTML and Express",
+"main": "app.js",
+"scripts": {
+"start": "node app.js"
+},
+"dependencies": {
+"express": "^4.18.2",
+"mongodb": "^5.7.0"
+}
+}
+app.js
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const app = express();
+const port = 3000;
+
+const url = 'mongodb://localhost:27017';
+const dbName = 'bankDB';
+const client = new MongoClient(url);
+
+app.use(express.static('public'));
+
+app.get('/api/banks', async (req, res) => {
+try {
+await client.connect();
+const db = client.db(dbName);
+const banks = await db.collection('banks').find().toArray();
+res.json(banks);
+} catch (err) {
+res.status(500).json({ error: err.message });
+}
+});
+
+app.listen(port, () => {
+console.log(`Server running at http://localhost:${port}`);
+});
+
+
+public/index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bank Details</title>
+<style>
+table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }
+th { background-color: #f2f2f2; }
+</style>
+</head>
+<body>
+<h1>Bank Details</h1>
+<table id="bankTable">
+<thead>
+<tr>
+<th>Bank No</th>
+<th>Bank Name</th>
+<th>Address</th>
+<th>IFSC Code</th>
+</tr>
+</thead>
+<tbody>
+<!-- Rows will be added here by script.js -->
+</tbody>
+</table>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+fetch('/api/banks')
+.then(response => response.json())
+.then(data => {
+const tableBody = document.querySelector('#bankTable tbody');
+
+data.forEach(bank => {
+const row = document.createElement('tr');
+row.innerHTML = `
+<td>${bank.bank_no}</td>
+<td>${bank.bank_name}</td>
+<td>${bank.address}</td>
+<td>${bank.ifsc}</td>
+`;
+tableBody.appendChild(row);
+});
+})
+.catch(error => {
+console.error('Error fetching data:', error);
+});
+public/script.js
+fetch('/api/banks')
+.then(response => response.json())
+.then(data => {
+const tableBody = document.querySelector('#bankTable tbody');
+
+data.forEach(bank => {
+const row = document.createElement('tr');
+row.innerHTML = `
+<td>${bank.bank_no}</td>
+<td>${bank.bank_name}</td>
+<td>${bank.address}</td>
+<td>${bank.ifsc}</td>
+`;
+tableBody.appendChild(row);
+});
+})
+.catch(error => {
+console.error('Error fetching data:', error);
+});
+
+Mongo DB
+use bankDB
+db.banks.insertMany([
+{
+bank_no: 101,
+bank_name: "State Bank of Exam",
+address: "123 Main Street, City",
+ifsc: "SBEX0001234"
+},
+{
+bank_no: 102,
+bank_name: "National Bank",
+address: "456 Side Street, Town",
+ifsc: "NBIN0005678"
+}
+]);
+npm install
+npm start
+Then go to: http://localhost:3000
+
+

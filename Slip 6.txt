@@ -1,0 +1,86 @@
+const { MongoClient } = require('mongodb');
+
+// MongoDB URI (replace with your MongoDB URI, this is for local MongoDB instance)
+const uri = 'mongodb://localhost:27017';
+const dbName = 'movieDatabase'; // Database name
+const collectionName = 'movies'; // Collection name
+
+// Create a MongoClient
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// Function to create the Movie database and collection, and interact with MongoDB
+async function main() {
+  try {
+    // Connect to MongoDB
+    await client.connect();
+    console.log('Connected to MongoDB');
+
+    // Get the database and collection
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    // Create movie documents to be inserted
+    const movie1 = {
+      title: 'The Shawshank Redemption',
+      director: 'Frank Darabont',
+      releaseYear: 1994,
+      genre: 'Drama',
+      rating: 9.3,
+    };
+
+    const movie2 = {
+      title: 'The Dark Knight',
+      director: 'Christopher Nolan',
+      releaseYear: 2008,
+      genre: 'Action',
+      rating: 9.0,
+    };
+
+    const movie3 = {
+      title: 'Inception',
+      director: 'Christopher Nolan',
+      releaseYear: 2010,
+      genre: 'Sci-Fi',
+      rating: 8.8,
+    };
+
+    // Insert movies into the collection
+    const result1 = await collection.insertOne(movie1);
+    const result2 = await collection.insertOne(movie2);
+    const result3 = await collection.insertOne(movie3);
+
+    console.log('Inserted movies:', result1.insertedId, result2.insertedId, result3.insertedId);
+
+    // Retrieve all movies from the collection
+    const movies = await collection.find().toArray();
+    console.log('All Movies:', movies);
+
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    // Close the connection to MongoDB
+    await client.close();
+    console.log('Connection closed');
+  }
+}
+
+// Run the main function
+main();
+
+
+
+Q2) Create a js file named main.js for event-driven application. There should be a main loop that listens for events, and then triggers a callback function when one of those events is detected.
+const EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+function onGreet() {
+console.log('Hello! An event was triggered.');
+}
+eventEmitter.on('greet', onGreet);
+setInterval(() => {
+console.log('Waiting for events...');
+eventEmitter.emit('greet');
+}, 2000);
+
+
+
+

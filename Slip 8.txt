@@ -1,0 +1,95 @@
+5. Using angular js Create a SPA that show Syllabus content of all subjects of M.Sc (CS)
+Sem-II (use ng-view)
+Ans-
+<!DOCTYPE html>
+<html ng-app="syllabusApp">
+<head>
+<meta charset="UTF-8">
+<title>M.Sc (CS) Sem-II Syllabus</title>
+</head>
+<body>
+<h1>M.Sc (CS) Sem-II Syllabus</h1>
+<nav>
+<a href="#!/">Home</a> |
+<a href="#!/ds">Data Structures</a> |
+<a href="#!/toc">Theory of Computation</a> |
+<a href="#!/se">Software Engineering</a>
+</nav>
+<div ng-view></div>
+<script src="angular.min.js"></script>
+<script src="angular-route.min.js"></script>
+<script>
+var app = angular.module("syllabusApp", ["ngRoute"]);
+app.config(function($routeProvider) {
+$routeProvider
+.when("/", {
+template: "<h2>Welcome to M.Sc (CS) Sem-II Syllabus</h2><p>Select a subject to view its
+syllabus.</p>"
+})
+
+.when("/ds", {
+template: "<h2>Data Structures</h2><ul><li>Arrays and Linked Lists</li><li>Stacks and
+Queues</li><li>Trees and Graphs</li><li>Searching and Sorting Algorithms</li></ul>"
+})
+.when("/toc", {
+template: "<h2>Theory of Computation</h2><ul><li>Finite Automata</li><li>Regular
+Expressions</li><li>Pushdown Automata</li><li>Turing Machines</li></ul>"
+})
+.when("/se", {
+template: "<h2>Software Engineering</h2><ul><li>Software Development Life Cycle
+(SDLC)</li><li>Agile and Scrum Models</li><li>Software Testing Techniques</li><li>Software
+Project Management</li></ul>"
+})
+.otherwise({ redirectTo: "/"
+});
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+Q2) Create a node.js file that Select all records from the "customers" table, and find the customers whose name starts from A‟.
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017';
+const dbName = 'customersDB';
+async function findCustomersStartingWithA() {
+const client = new MongoClient(uri);
+
+try {
+await client.connect();
+console.log('✅ Connected to MongoDB');
+
+const db = client.db(dbName);
+const customers = db.collection('customers');
+const query = { name: { $regex: /^A/i } };
+const results = await customers.find(query).toArray();
+
+console.log('📋 Customers whose name starts with A:');
+results.forEach(customer => {
+console.log(`- ${customer.name} (${customer.email})`);
+});
+
+} catch (err) {
+console.error(' Error:', err);
+} finally {
+await client.close();
+console.log('MongoDB connection closed');
+}
+}
+findCustomersStartingWithA();
+MongoDB
+use customersDB
+db.customers.insertMany([
+{ name: 'Amit Sharma', email: 'amit.sharma@example.com' },
+{ name: 'Anjali Mehra', email: 'anjali.mehra@example.com' },
+{ name: 'Rahul Verma', email: 'rahul.verma@example.com' },
+{ name: 'Priya Singh', email: 'priya.singh@example.com' },
+{ name: 'Arjun Reddy', email: 'arjun.reddy@example.com' }
+])
+

@@ -1,0 +1,110 @@
+Create a nodejs program to build your own module math operation and perform all
+the arithematic operation in that. Use export statement and create a simple web server
+and display the result of all mathematic operation through module.
+AnsCreate a custom module mathOperations.js
+module.exports = {
+ add: (a, b) => a + b,
+ subtract: (a, b) => a - b,
+ multiply: (a, b) => a * b,
+ divide: (a, b) => b !== 0 ? a / b : 'Cannot divide by zero'
+};
+server.js
+const http = require('http');
+const math = require('./mathOperations');
+const server = http.createServer((req, res) => {
+ res.writeHead(200, { 'Content-Type': 'text/html' });
+ const a = 10;
+ const b = 5;
+ res.write(`<h1>Arithmetic Operations</h1>`);
+ res.write(`<p>${a} + ${b} = ${math.add(a, b)}</p>`);
+ res.write(`<p>${a} - ${b} = ${math.subtract(a, b)}</p>`);
+ res.write(`<p>${a} * ${b} = ${math.multiply(a, b)}</p>`);
+ res.write(`<p>${a} / ${b} = ${math.divide(a, b)}</p>`);
+res.end();
+});
+
+const port = 3000;
+server.listen(port, () => {
+ console.log(`Server running at http://localhost:${port}`);
+});
+Save as .js
+
+
+
+Q2) Using angular js create a SPA to accept the details such as name, mobile number, pin code and email address and make validation. Name should contain character only, address should contain SPPU M.Sc. Computer Science Syllabus 2023-24, mobile number should contain only 10 digit, Pin code should contain only 6 digit, email id should contain only one @, . Symbol.
+
+<!DOCTYPE html>
+<html ng-app="studentApp">
+<head>
+<title>Student Form</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<style>
+.error { color: red; }
+</style>
+</head>
+<body ng-controller="FormController">
+
+<h2>Student Details Form</h2>
+<form name="studentForm" novalidate>
+<label>Name:</label><br>
+<input type="text" name="name" ng-model="student.name"
+ng-pattern="/^[a-zA-Z ]+$/" required />
+<span class="error" ng-show="studentForm.name.$touched && studentForm.name.$invalid">
+Name must contain characters only.
+</span><br><br>
+
+<label>Mobile Number:</label><br>
+<input type="text" name="mobile" ng-model="student.mobile"
+ng-pattern="/^\d{10}$/" required />
+<span class="error" ng-show="studentForm.mobile.$touched && studentForm.mobile.$invalid">
+Mobile number must be exactly 10 digits.
+</span><br><br>
+
+<label>Pin Code:</label><br>
+<input type="text" name="pincode" ng-model="student.pincode"
+ng-pattern="/^\d{6}$/" required />
+<span class="error" ng-show="studentForm.pincode.$touched && studentForm.pincode.$invalid">
+Pin code must be exactly 6 digits.
+</span><br><br>
+
+<label>Email:</label><br>
+<input type="email" name="email" ng-model="student.email"
+ng-pattern="/^[^@]+@[^@]+\.[^@]+$/" required />
+<span class="error" ng-show="studentForm.email.$touched && studentForm.email.$invalid">
+Enter a valid email (must include "@" and ".").
+</span><br><br>
+
+<label>Address:</label><br>
+<input type="text" name="address" ng-model="student.address"
+ng-pattern="/^SPPU M\.Sc\. Computer Science Syllabus 2023-24$/" required />
+<span class="error" ng-show="studentForm.address.$touched && studentForm.address.$invalid">
+Address must be: SPPU M.Sc. Computer Science Syllabus 2023-24
+</span><br><br>
+<button type="submit" ng-disabled="studentForm.$invalid">Submit</button>
+</form>
+
+<div ng-if="studentForm.$valid">
+<h3>Submitted Data:</h3>
+<p><strong>Name:</strong> {{student.name}}</p>
+<p><strong>Mobile:</strong> {{student.mobile}}</p>
+<p><strong>Pin Code:</strong> {{student.pincode}}</p>
+<p><strong>Email:</strong> {{student.email}}</p>
+<p><strong>Address:</strong> {{student.address}}</p>
+</div>
+
+<script>
+angular.module('studentApp', [])
+.controller('FormController', function($scope) {
+$scope.student = {};
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+

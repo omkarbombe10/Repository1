@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app="locationApp">
+<head>
+ <meta charset="UTF-8">
+ <title>AngularJS - Show Page Location</title>
+ <script src="angular.min.js"></script>
+ <script>
+ angular.module('locationApp', [])
+ .controller('LocationController', function($scope, $location) {
+ $scope.fullUrl = $location.absUrl();
+ $scope.protocol = $location.protocol();
+ $scope.host = $location.host();
+ $scope.path = $location.path();
+ });
+ </script>
+</head>
+<body ng-controller="LocationController">
+<h1>Current Page Location</h1>
+ <p><strong>Full URL:</strong> {{ fullUrl }}</p>
+ <p><strong>Protocol:</strong> {{ protocol }}</p>
+ <p><strong>Host:</strong> {{ host }}</p>
+ <p><strong>Path:</strong> {{ path }}</p>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+Q2) Create a web application to fetch the product details using mongodb connection and display the result in html table using expressjs and mongodb.
+
+npm install express mongoose
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+const port = 3000;
+
+mongoose.connect('mongodb://localhost:27017/productsDB', { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
+
+const productSchema = new mongoose.Schema({
+name: String,
+price: Number,
+category: String,
+description: String
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+app.use(express.static('public'));
+
+app.get('/', async (req, res) => {
+try {
+const products = await Product.find();
+
+res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product List</title>
+<style>
+table { width: 100%; border-collapse: collapse; }
+table, th, td { border: 1px solid black; }
+th, td { padding: 10px; text-align: left; }
+</style>
+</head>
+<body>
+<h1>Product List</h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Price</th>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+${products.map(product => `
+<tr>
+<td>${product.name}</td>
+<td>$${product.price}</td>
+<td>${product.category}</td>
+<td>${product.description}</td>
+</tr>
+`).join('')}
+</tbody>
+</table>
+</body>
+</html>
+`);
+} catch (err) {
+res.status(500).send('Error fetching products: ' + err.message);
+}
+});
+
+app.listen(port, () => {
+console.log(`Server running on http://localhost:${port}`);
+});
+Mongo DB
+use productsDB
+db.products.insertMany([
+{ name: 'Product 1', price: 19.99, category: 'Category 1', description: 'Description for Product 1' },
+{ name: 'Product 2', price: 29.99, category: 'Category 2', description: 'Description for Product 2' },
+{ name: 'Product 3', price: 39.99, category: 'Category 3', description: 'Description for Product 3' }
+])

@@ -1,0 +1,167 @@
+Q1)----------------------
+
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Directives Demo</title>
+    <script src="angular.min.js"></script>
+</head>
+<body ng-controller="DemoController">
+
+    <!-- ng-model Directive -->
+    <div>
+        <label>Name:</label>
+        <input type="text" ng-model="name">
+        <p>Hello, {{name}}</p>
+    </div>
+
+    <!-- ng-repeat Directive -->
+    <ul>
+        <li ng-repeat="item in items">{{item}}</li>
+    </ul>
+
+    <!-- ng-show Directive -->
+    <button ng-click="toggle()">Toggle Visibility</button>
+    <p ng-show="isVisible">This is visible!</p>
+
+    <!-- ng-if Directive -->
+    <button ng-click="toggleIf()">Toggle If</button>
+    <p ng-if="showParagraph">This paragraph is conditionally rendered.</p>
+
+    <script>
+        angular.module('app', [])
+            .controller('DemoController', function($scope) {
+                $scope.name = '';
+                $scope.items = ['Item 1', 'Item 2', 'Item 3'];
+                $scope.isVisible = true;
+                $scope.showParagraph = false;
+
+                // Toggle visibility
+                $scope.toggle = function() {
+                    $scope.isVisible = !$scope.isVisible;
+                };
+
+                // Toggle ng-if paragraph
+                $scope.toggleIf = function() {
+                    $scope.showParagraph = !$scope.showParagraph;
+                };
+            });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+Q2)---------------
+
+
+const express = require('express');
+const { MongoClient, ObjectId } = require('mongodb');
+
+const app = express();
+const port = 3000;
+
+// MongoDB connection URI and database name
+const uri = 'mongodb://localhost:27017';
+const dbName = 'college';
+
+// Use Express's built-in middleware to parse JSON bodies
+app.use(express.json());
+
+// MongoDB client setup
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+let studentsCollection;
+
+client.connect()
+  .then(() => {
+    const db = client.db(dbName);
+    studentsCollection = db.collection('students');
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => console.error('MongoDB connection error:', error));
+
+// Route to create a new student
+app.post('/students', async (req, res) => {
+  const { firstName, lastName, age, department } = req.body;
+
+  if (!firstName || !lastName || !age || !department) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const result = await studentsCollection.insertOne({
+      firstName,
+      lastName,
+      age,
+      department,
+      enrollmentDate: new Date(),
+    });
+    res.status(201).json({ message: 'Student created', studentId: result.insertedId });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create student' });
+  }
+});
+
+// Route to update an existing student by ID
+app.put('/students/:id', async (req, res) => {
+  const studentId = req.params.id;
+  const { firstName, lastName, age, department } = req.body;
+
+  if (!firstName || !lastName || !age || !department) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const result = await studentsCollection.updateOne(
+      { _id: new ObjectId(studentId) },
+      { $set: { firstName, lastName, age, department } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    res.status(200).json({ message: 'Student updated' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update student' });
+  }
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+
+
+
+
+
+
+-------------------------- HOW TO RUN------------------
+
+
+Create a New Student:
+
+Method: POST
+
+URL: http://localhost:3000/students
+
+Update an Existing Student:
+
+Method: PUT
+
+URL: http://localhost:3000/students/<studentId> (replace <studentId> with the actual student ID you want to update)
+

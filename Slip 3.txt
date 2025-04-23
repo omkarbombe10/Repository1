@@ -1,0 +1,65 @@
+Create a Simple Web Server using NodeJS.
+Ansconst http = require('http');
+const hostname = '127.0.0.1';
+const port = 3000;
+const server = http.createServer((req, res) => {
+res.statusCode = 200;
+res.setHeader('Content-Type', 'text/plain');
+res.end('Hello, world!\n');
+});
+server.listen(port, hostname, () => {
+console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+
+Q2 Create a program to display the student registration page using middleware ExpressJS.
+const express = require('express');
+const app = express();
+const PORT = 3000;
+app.use((req, res, next) => {
+console.log(`${req.method} ${req.url}`);
+next();
+});
+app.use(express.urlencoded({ extended: true }));
+app.get('/register', (req, res) => {
+res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Registration</title>
+</head>
+<body>
+<h1>Student Registration</h1>
+<form action="/register" method="POST">
+<label>Name:</label>
+<input type="text" name="name" required><br><br>
+<label>Email:</label>
+<input type="email" name="email" required><br><br>
+<label>Course:</label>
+<input type="text" name="course" required><br><br>
+<button type="submit">Register</button>
+</form>
+</body>
+</html>
+`);
+});
+app.post('/register', (req, res) => {
+const { name, email, course } = req.body;
+res.send(`
+<h2>Student Registered Successfully!</h2>
+<p><strong>Name:</strong> ${name}</p>
+<p><strong>Email:</strong> ${email}</p>
+<p><strong>Course:</strong> ${course}</p>
+<a href="/register">Register Another Student</a>
+`);
+});
+app.listen(PORT, () => {
+console.log(`Server is running at http://localhost:${PORT}`);
+});
+
+Commands to run
+npm install express
+Run npm init -y to create a package.json
+Run this
+http://localhost:3000/register
+

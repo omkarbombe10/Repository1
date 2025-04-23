@@ -1,0 +1,88 @@
+Q1)
+// Import MongoClient from mongodb
+const { MongoClient } = require('mongodb');
+
+// MongoDB URI (replace with your MongoDB URI if using a remote database)
+const uri = 'mongodb://localhost:27017'; // Local MongoDB URI
+const dbName = 'college'; // Name of the database
+
+async function run() {
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+  try {
+    // Connect to MongoDB
+    await client.connect();
+    console.log('Connected to MongoDB');
+
+    // Select the database
+    const db = client.db(dbName);
+
+    // Create a new collection (table equivalent in MongoDB)
+    const studentsCollection = db.collection('students');
+
+    // Insert a new student document
+    const newStudent = {
+      firstName: 'John',
+      lastName: 'Doe',
+      age: 20,
+      department: 'Computer Science',
+      enrollmentDate: new Date(),
+    };
+
+    const insertResult = await studentsCollection.insertOne(newStudent);
+    console.log('Student inserted with id:', insertResult.insertedId);
+
+    // Find all students
+    const students = await studentsCollection.find().toArray();
+    console.log('All Students:', students);
+
+    // Find a student by firstName
+    const student = await studentsCollection.findOne({ firstName: 'John' });
+    console.log('Found Student:', student);
+
+  } catch (error) {
+    console.error('Error interacting with MongoDB:', error);
+  } finally {
+    // Close the MongoDB connection
+    await client.close();
+    console.log('MongoDB connection closed');
+  }
+}
+
+// Run the function
+run();
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q2 ) Write node js script to build Your Own Node.js Module. Use require („http‟) module is a built-in Node module that invokes the functionality of the HTTP library to create a local server. Also use the export statement to make functions in your module available externally. Create a new text file to contain the functions in your module called, “modules.js” and add this function to return today‟s date and time.
+
+modules.js
+function getCurrentDateTime() {
+return new Date().toString();
+}
+module.exports = {
+getCurrentDateTime
+};
+server.js
+const http = require('http');
+const myModule = require('./modules');
+const server = http.createServer((req, res) => {
+res.writeHead(200, { 'Content-Type': 'text/plain' });
+res.end('Current Date and Time: ' + myModule.getCurrentDateTime());
+});
+server.listen(3000, () => {
+console.log('Server is running at http://localhost:3000');
+});
+Save as .js
+
+

@@ -1,0 +1,123 @@
+7. write node js script to interact with the filesystem, and serve a web page from a file
+Ansconst http = require('http');
+const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Node.js Page</title>
+</head>
+<body>
+<h1>Hello from Node.js Server!</h1>
+<p>This page is served from the filesystem using a Node.js script.</p>
+</body>
+</html>
+`;
+const server = http.createServer((req, res) => {
+if (req.url === '/') {
+res.writeHead(200, { 'Content-Type': 'text/html' });
+res.end(htmlContent);
+} else {
+res.writeHead(404, { 'Content-Type': 'text/plain' });
+res.end('404 Not Found');
+}
+});
+const PORT = 3000;
+server.listen(PORT, () => {
+console.log(`Server running at http://localhost:${PORT}`);
+});
+
+
+
+
+
+
+
+
+
+Q2) Create a web application to fetch the employee details using mongodb connection and display the result in html table using expressjs and mongodb.
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const app = express();
+const PORT = 3000;
+
+const uri = 'mongodb://localhost:27017'; // Or MongoDB Atlas URI
+const dbName = 'companyDB';
+
+app.get('/', async (req, res) => {
+const client = new MongoClient(uri);
+try {
+await client.connect();
+const db = client.db(dbName);
+const employees = await db.collection('employees').find().toArray();
+
+let html = `
+<html>
+<head>
+<title>Employee List</title>
+<style>
+table {
+width: 60%;
+margin: 20px auto;
+border-collapse: collapse;
+}
+th, td {
+border: 1px solid #888;
+padding: 8px;
+text-align: left;
+}
+th {
+background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+<h2 style="text-align:center;">Employee Details</h2>
+<table>
+<tr>
+<th>Name</th>
+<th>Department</th>
+<th>Email</th>
+</tr>
+`;
+employees.forEach(emp => {
+html += `
+<tr>
+<td>${emp.name}</td>
+<td>${emp.department}</td>
+<td>${emp.email}</td>
+</tr>
+`;
+});
+
+// End HTML
+html += `
+</table>
+</body>
+</html>
+`;
+
+res.send(html);
+} catch (err) {
+res.status(500).send('Error fetching data');
+} finally {
+await client.close();
+}
+});
+
+app.listen(PORT, () => {
+console.log(`Server is running at http://localhost:${PORT}`);
+});
+
+MongoDB
+use companyDB
+db.employees.insertMany([
+{ "name": "John Doe", "department": "IT", "email": "john@example.com" },
+{ "name": "Jane Smith", "department": "HR", "email": "jane@example.com" },
+{ "name": "Mike Lee", "department": "Finance", "email": "mike@example.com" },
+{ "name": "Alice Johnson", "department": "Marketing", "email": "alice@example.com" },
+{ "name": "Bob Brown", "department": "Sales", "email": "bob@example.com" }
+]);
+db.employees.find().pretty();
+npm init -y
+npm install express
+

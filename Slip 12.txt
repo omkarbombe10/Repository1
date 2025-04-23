@@ -1,0 +1,93 @@
+5. Create a Node.js file that opens the requested file and returns the content to the
+client. If anything goes wrong, throw a 404 error
+Ansconst http = require('http');
+const fs = require('fs');
+const path = require('path');
+const server = http.createServer((req, res) => {
+ const filePath = path.join(__dirname, 'your-file.txt');
+ fs.readFile(filePath, 'utf8', (err, data) => {
+ if (err) {
+ res.writeHead(404, { 'Content-Type': 'text/plain' });
+ res.end('Error: File Not Found');
+ } else {
+ res.writeHead(200, { 'Content-Type': 'text/plain' });
+ res.end(data);
+ }
+ });
+});
+server.listen(3000, () => {
+ console.log('Server is listening on port 3000');
+});
+Replace 'your-file.txt' with the actual path to the file you want to read.
+Save as .js
+
+
+
+
+
+
+
+
+
+
+Q2) Create an AngularJS application that allows users to enter Product Details using a form. Product Name (only alphabets and spaces allowed), Price (must be a positive number between ₹100 and ₹10,000) , validate the fields and show error messages. Display a confirmation message like “Product added successfully!” using ng-show after successful submission.
+<!DOCTYPE html>
+<html ng-app="productApp">
+<head>
+<meta charset="utf-8">
+<title>Product Form</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<style>
+.error { color: red; }
+.success { color: green; font-weight: bold; }
+</style>
+</head>
+<body ng-controller="ProductController">
+
+<h2>Enter Product Details</h2>
+<form name="productForm" ng-submit="submitForm()" novalidate>
+
+<label>Product Name:</label><br>
+<input type="text" name="productName" ng-model="product.name"
+ng-pattern="/^[A-Za-z\s]+$/" required>
+<br>
+<span class="error" ng-show="productForm.productName.$touched && productForm.productName.$error.required">
+Product Name is required.
+</span>
+<span class="error" ng-show="productForm.productName.$error.pattern">
+Only alphabets and spaces are allowed.
+</span>
+<br><br>
+
+<label>Price (₹):</label><br>
+<input type="number" name="productPrice" ng-model="product.price"
+min="100" max="10000" required>
+<br>
+<span class="error" ng-show="productForm.productPrice.$touched && productForm.productPrice.$error.required">
+Price is required.
+</span>
+<span class="error" ng-show="productForm.productPrice.$error.min || productForm.productPrice.$error.max">
+Price must be between ₹100 and ₹10,000.
+</span>
+<br><br>
+<button type="submit">Add Product</button>
+</form>
+<p class="success" ng-show="showSuccessMessage">Product added successfully!</p>
+<script>
+angular.module('productApp', [])
+.controller('ProductController', function($scope) {
+$scope.product = {};
+$scope.showSuccessMessage = false;
+
+$scope.submitForm = function() {
+if ($scope.productForm.$valid) {
+$scope.showSuccessMessage = true;
+} else {
+$scope.showSuccessMessage = false;
+}
+};
+});
+</script>
+</body>
+</html>
+

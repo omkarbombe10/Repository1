@@ -1,0 +1,77 @@
+3. Using angular js display the 10 student details in Table format (using ng-repeat
+directive use Array to store data)
+Ans-
+<!DOCTYPE html>
+<html lang="en" ng-app="studentApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Details</title>
+<script src="angular.min.js"></script>
+</head>
+<body ng-controller="StudentController">
+<h2>Student Details</h2>
+<table border="1">
+<thead>
+<tr>
+<th>Roll Number</th>
+<th>Name</th>
+<th>Age</th>
+<th>Course</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="student in students">
+<td>{{ student.rollNumber }}</td>
+<td>{{ student.name }}</td>
+<td>{{ student.age }}</td>
+
+<td>{{ student.course }}</td>
+</tr>
+</tbody>
+</table>
+<script>
+var app = angular.module('studentApp', []);
+app.controller('StudentController', function($scope) {
+// Array of student objects with Indian names
+$scope.students = [
+{ rollNumber: 1, name: 'Amit Kumar', age: 20, course: 'Computer Science' },
+{ rollNumber: 2, name: 'Priya Sharma', age: 22, course: 'Mathematics' },
+{ rollNumber: 3, name: 'Ravi Patel', age: 21, course: 'Physics' },
+{ rollNumber: 4, name: 'Sneha Reddy', age: 23, course: 'Biology' },
+{ rollNumber: 5, name: 'Vikram Singh', age: 24, course: 'Chemistry' },
+{ rollNumber: 6, name: 'Anjali Gupta', age: 20, course: 'Psychology' },
+{ rollNumber: 7, name: 'Karan Mehta', age: 22, course: 'Engineering' },
+{ rollNumber: 8, name: 'Neha Desai', age: 23, course: 'Medicine' },
+{ rollNumber: 9, name: 'Sandeep Yadav', age: 21, course: 'Law' },
+{ rollNumber: 10, name: 'Tanvi Joshi', age: 22, course: 'Business' }
+];
+});
+</script>
+</body>
+</html>
+Save as .html
+
+
+
+
+
+
+Q2 )  Create a js file named main.js for event-driven application. There should be a main loop that listens for events, and then triggers a callback function when one of those events is detected.
+const EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+
+function onGreet() {
+console.log('Hello! An event was triggered.');
+}
+eventEmitter.on('greet', onGreet);
+
+setInterval(() => {
+console.log('Waiting for events...');
+eventEmitter.emit('greet');
+}, 2000);
+
+
+
+
+

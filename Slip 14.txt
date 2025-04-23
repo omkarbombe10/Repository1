@@ -1,0 +1,105 @@
+const fs1 = require('fs');
+const http = require('http');
+
+http.createServer(function (req, res) {
+  
+fs1.readFile('a.txt', function (err, data1) {
+    if (err) {
+        res.write('Not found');
+        res.end();
+        return;
+    }
+        
+   
+fs1.readFile('b.txt', function (err, data2) {
+    if (err) {
+        res.write('Not Found');
+        res.end();
+        return;
+    }
+            
+          
+const p = data1 + '\n' + data2;
+
+            
+fs1.appendFile('c.txt',p,function (err) {
+                if (err) {
+                    res.write('Not Found');
+                } else {
+                    res.write('Files have appended!');
+                }
+                res.end();
+            });
+        });
+    });
+}).listen(8223);
+
+
+
+
+
+
+Q2) Create an AngularJS application with a module, service, and controller to calculate the total and average marks of a student from five subjects. Display results in the view. The service should handle the logic for calculation.
+<!DOCTYPE html>
+<html ng-app="studentApp">
+<head>
+<meta charset="UTF-8">
+<title>Student Marks Calculator</title>
+<script src="angular.min.js"></script>
+
+<script>
+var app = angular.module('studentApp', []);
+
+app.service('MarksService', function () {
+this.calculateTotal = function (marks) {
+return marks.subject1 + marks.subject2 + marks.subject3 + marks.subject4 + marks.subject5;
+};
+
+this.calculateAverage = function (total, numberOfSubjects) {
+return total / numberOfSubjects;
+};
+});
+app.controller('MarksController', function ($scope, MarksService) {
+$scope.marks = {
+subject1: 0,
+subject2: 0,
+subject3: 0,
+subject4: 0,
+subject5: 0
+};
+
+$scope.total = null;
+$scope.average = null;
+
+$scope.calculate = function () {
+var total = MarksService.calculateTotal($scope.marks);
+var average = MarksService.calculateAverage(total, 5);
+
+$scope.total = total;
+$scope.average = average;
+};
+});
+</script>
+</head>
+<body ng-controller="MarksController">
+
+<h2>Student Marks Calculator</h2>
+<div>
+<label>Subject 1: <input type="number" ng-model="marks.subject1"></label><br>
+<label>Subject 2: <input type="number" ng-model="marks.subject2"></label><br>
+<label>Subject 3: <input type="number" ng-model="marks.subject3"></label><br>
+<label>Subject 4: <input type="number" ng-model="marks.subject4"></label><br>
+<label>Subject 5: <input type="number" ng-model="marks.subject5"></label><br><br>
+
+<button ng-click="calculate()">Calculate</button>
+</div>
+
+<div ng-if="total !== null">
+<h3>Results</h3>
+<p>Total Marks: {{ total }}</p>
+<p>Average Marks: {{ average }}</p>
+</div>
+</body>
+</html>
+
+
